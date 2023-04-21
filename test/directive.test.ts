@@ -19,6 +19,7 @@ import Multiple from './components/Multiple.vue'
 import Options from './components/Options.vue'
 import Parent from './components/Parent.vue'
 import Simple from './components/Simple.vue'
+import MergeBindConfig from './components/MergeBindConfig.vue'
 
 test('simple directive', async () => {
   const wrapper = mount(Simple)
@@ -272,4 +273,25 @@ test('options api component', async () => {
   await input.setValue('123')
   expect(input.element.value).toBe('1-2')
   expect(wrapper.get('div').element.textContent).toBe('1-2')
+})
+
+test('merge bind and config', async () => {
+  const wrapper = mount(MergeBindConfig)
+  const input = wrapper.get('input')
+
+  await input.setValue('1')
+  expect(input.element.value).toBe('')
+  expect(wrapper.get('div').element.textContent).toBe('')
+
+  await input.setValue('ab')
+  expect(input.element.value).toBe('AB')
+  expect(wrapper.get('div').element.textContent).toBe('AB')
+
+  await input.setValue('ab cd ')
+  expect(input.element.value).toBe('AB CD')
+  expect(wrapper.get('div').element.textContent).toBe('AB CD')
+
+  await input.setValue('ab cd1')
+  expect(input.element.value).toBe('AB CD')
+  expect(wrapper.get('div').element.textContent).toBe('AB CD')
 })
